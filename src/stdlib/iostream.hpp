@@ -8,13 +8,25 @@
 
 namespace std {
 
-	class iostream {
+	class NewLine{};
+
+	class ostream {
+	private:
+		static const int TABSIZE;
+
+		uint16_t* outputBuffer;
+		uint8_t curX;
+		uint8_t curY;
+		void place(const char c);
+		void linefeed();
+		void tab();
 	public:
-		iostream();
-		iostream& operator<<(const char* str);
+		ostream();
+		ostream& operator<<(const char* str);
+		ostream& operator<<(NewLine);
 	};
 
-	extern iostream cout;
-	extern char* endl;
+	extern ostream cout;
+	extern NewLine endl;
 
 }

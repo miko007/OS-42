@@ -44,4 +44,4 @@ run: kernel.iso
 
 .PHONY: clean
 clean:
-	rm -f obj kernel.bin kernel.iso
+	rm -rf obj kernel.bin kernel.iso
