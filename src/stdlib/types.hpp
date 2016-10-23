@@ -4,6 +4,9 @@
 
 #pragma once
 
+#define null 0
+#define nullptr null
+
 typedef char int8_t;
 typedef unsigned char uint8_t;
 typedef short int16_t;

@@ -34,5 +34,4 @@ namespace memory {
 	};
 
 	typedef GlobalDescriptorTable GDT;
-
 }

@@ -4,13 +4,15 @@
 
 #include <interrupts/InterruptManager.hpp>
 #include <iostream.hpp>
+#include <string.hpp>
+#include <interrupts/InterruptHandler.hpp>
 
 namespace interrupts {
 
 	InterruptManager::GateDescriptor InterruptManager::InterruptDescriptorTable[256];
-
+	InterruptManager* InterruptManager::CurrentInterruptManager = nullptr;
 	//checked
-	InterruptManager::InterruptManager(uint16_t hwInterruptOffset, memory::GlobalDescriptorTable *gdt) :
+	InterruptManager::InterruptManager(uint16_t hwInterruptOffset, memory::GDT *gdt) :
 			hwInterruptOffset(hwInterruptOffset),
 			picMCommand(0x20),
 			picMData(0x21),
@@ -51,11 +53,42 @@ namespace interrupts {
 	}
 
 	void InterruptManager::activate() {
+		if (InterruptManager::CurrentInterruptManager != nullptr)
+			InterruptManager::CurrentInterruptManager->deactivate();
+		InterruptManager::CurrentInterruptManager = this;
 		asm("sti");
 	}
 
+	void InterruptManager::deactivate() {
+		if (InterruptManager::CurrentInterruptManager == this) {
+			InterruptManager::CurrentInterruptManager = nullptr;
+			asm("cli");
+		}
+	}
+
 	uint32_t InterruptManager::HandleInterrupt(uint8_t number, uint32_t esp) {
-		std::cout << "\t\tINTERRUPT!" << std::endl;
+		if (InterruptManager::CurrentInterruptManager != nullptr)
+			return InterruptManager::CurrentInterruptManager->processIterrupt(number, esp);
+
+		return esp;
+	}
+
+	uint32_t InterruptManager::processIterrupt(uint8_t number, uint32_t esp) {
+		if (this->handlers[number] != nullptr) {
+			this->handlers[number]->handleInterrupt(esp);
+		}
+		/**
+		 * ignore TIMER INTERRUPT
+		 */
+		else if (number != 0x20)
+			std::cout << " > UNHANDLED Interrupt at address " << number << std::endl;
+
+		if (number >= 0x20 && number <= 0x30) {
+			this->picMCommand.write(0x20);
+			if (number >= 0x28)
+				this->picSCommand.write(0x20);
+		}
+
 		return esp;
 	}
 

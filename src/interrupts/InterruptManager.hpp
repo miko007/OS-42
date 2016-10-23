@@ -6,13 +6,18 @@
 
 #include <types.hpp>
 #include <hardware/Port.hpp>
-#include "../memory/gdt.h"
 #include <memory/GlobalDescriptorTable.hpp>
 
 namespace interrupts {
 
+	class InterruptHandler;
+
 	class InterruptManager {
+		friend class InterruptHandler;
 	protected:
+		static InterruptManager* CurrentInterruptManager;
+		InterruptHandler* handlers[256];
+
 		struct GateDescriptor {
 			uint16_t handlerAddrLo;
 			uint16_t gdtCodeOffset;
@@ -42,9 +47,11 @@ namespace interrupts {
 		static void HandleRequest0x01();
 
 		static uint32_t HandleInterrupt(uint8_t number, uint32_t esp);
+		uint32_t processIterrupt(uint8_t number, uint32_t esp);
 	public:
-		InterruptManager(uint16_t hwInterruptOffset, memory::GlobalDescriptorTable* gdt);
+		InterruptManager(uint16_t hwInterruptOffset, memory::GDT* gdt);
 		void activate();
+		void deactivate();
 	};
 
 }

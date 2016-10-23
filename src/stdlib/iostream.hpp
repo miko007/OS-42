@@ -5,6 +5,7 @@
 #pragma once
 
 #include <types.hpp>
+#include <drivers/Keyboard.hpp>
 
 namespace std {
 
@@ -20,9 +21,15 @@ namespace std {
 		void place(const char c);
 		void linefeed();
 		void tab();
+		void remove();
 	public:
 		ostream();
 		ostream& operator<<(const char* str);
+		ostream& operator<<(uint8_t hex);
+		/**
+		 * Until we have a shell, this is how we get input on the screen
+		 */
+		ostream& operator<<(drivers::KeyCode key);
 		ostream& operator<<(NewLine);
 	};
 

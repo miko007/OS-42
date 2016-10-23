@@ -30,13 +30,85 @@ namespace std {
 			if (this->curX >= 80) {
 				this->linefeed();
 			}
+			/**
+			 * Clear Buffer
+			 */
 			if (this->curY >= 25) {
 				for (this->curY = 0; this->curY < 25; this->curY++) {
 					for (this->curX = 0; this->curX < 80; this->curX++)
 						this->place(' ');
 				}
+				this->curX = 0;
+				this->curY = 0;
 			}
 		}
+
+		return *this;
+	}
+
+	ostream &ostream::operator<<(uint8_t hex) {
+		char* output = "0x00";
+		const char* alphabet = "0123456789ABCDEF";
+		output[2] = alphabet[(hex >> 4) & 0x0F];
+		output[3] = alphabet[hex & 0x0F];
+		cout << output;
+
+		return *this;
+	}
+
+	ostream &ostream::operator<<(drivers::KeyCode key) {
+		if (key == drivers::BACKSPACE) {
+			this->remove();
+			return *this;
+		}
+		const char* c;
+		switch(key) {
+			case drivers::TOP1: c = "1"; break;
+			case drivers::TOP2: c = "2"; break;
+			case drivers::TOP3: c = "3"; break;
+			case drivers::TOP4: c = "4"; break;
+			case drivers::TOP5: c = "5"; break;
+			case drivers::TOP6: c = "6"; break;
+			case drivers::TOP7: c = "7"; break;
+			case drivers::TOP8: c = "8"; break;
+			case drivers::TOP9: c = "9"; break;
+			case drivers::TOP0: c = "0"; break;
+			case drivers::A: c = "a"; break;
+			case drivers::B: c = "b"; break;
+			case drivers::C: c = "c"; break;
+			case drivers::D: c = "d"; break;
+			case drivers::E: c = "e"; break;
+			case drivers::F: c = "f"; break;
+			case drivers::G: c = "g"; break;
+			case drivers::H: c = "h"; break;
+			case drivers::I: c = "i"; break;
+			case drivers::J: c = "j"; break;
+			case drivers::K: c = "k"; break;
+			case drivers::L: c = "l"; break;
+			case drivers::M: c = "m"; break;
+			case drivers::N: c = "n"; break;
+			case drivers::O: c = "o"; break;
+			case drivers::P: c = "p"; break;
+			case drivers::Q: c = "q"; break;
+			case drivers::R: c = "r"; break;
+			case drivers::S: c = "s"; break;
+			case drivers::T: c = "t"; break;
+			case drivers::U: c = "u"; break;
+			case drivers::V: c = "v"; break;
+			case drivers::W: c = "w"; break;
+			case drivers::X: c = "x"; break;
+			case drivers::Y: c = "y"; break;
+			case drivers::Z: c = "z"; break;
+			case drivers::SPACE: c = " "; break;
+			case drivers::ENTER: c = "\n"; break;
+			case drivers::COMMA: c = ","; break;
+			case drivers::PERIOD: c = "."; break;
+			case drivers::MINUS: c = "-"; break;
+			default:
+				c = "";
+				break;
+		}
+		cout << c;
 
 		return *this;
 	}
@@ -61,6 +133,15 @@ namespace std {
 			this->place(' ');
 			this->curX++;
 		}
+	}
+
+	void ostream::remove() {
+		this->curX--;
+		if (this->curX > 80) {
+			this->curX = 80;
+			this->curY--;
+		}
+		this->place(' ');
 	}
 
 }

@@ -1,4 +1,4 @@
-gppParams = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore
+gppParams = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wwrite-strings
 asmParams = --32
 ldParams  = -melf_i386
 
@@ -8,6 +8,7 @@ incParams=$(foreach d, $(INC), -I$d)
 objects = obj/asm/loader.o \
           obj/asm/interrupta.o \
           obj/stdlib/iostream.o \
+          obj/drivers/Keyboard.o \
           obj/memory/GlobalDescriptorTable.o \
           obj/interrupts/InterruptManager.o \
           obj/kernel.o
