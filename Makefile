@@ -9,6 +9,7 @@ objects = obj/asm/loader.o \
           obj/asm/interrupta.o \
           obj/stdlib/iostream.o \
           obj/drivers/Keyboard.o \
+          obj/drivers/Mouse.o \
           obj/memory/GlobalDescriptorTable.o \
           obj/interrupts/InterruptManager.o \
           obj/kernel.o

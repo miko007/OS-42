@@ -14,6 +14,7 @@
 #include <memory/GlobalDescriptorTable.hpp>
 #include <interrupts/InterruptManager.hpp>
 #include <drivers/Keyboard.hpp>
+#include <drivers/Mouse.hpp>
 
 typedef void (*constructor)();
 extern "C" constructor start_ctors;
@@ -35,8 +36,14 @@ extern "C" void kernel(void* multibootStruct, uint32_t magicNumber) {
 	interrupts::InterruptManager interruptMgr(0x20, &gdt);
 
 	std::cout << "loading drivers" << std::endl;
+
+
 	std::cout << "\t- KEYBOARD" << std::endl;
 	drivers::Keyboard keyboard(&interruptMgr);
+
+	std::cout << "\t- MOUSE" << std::endl;
+	drivers::Mouse mouse(&interruptMgr);
+
 	std::cout << "\tDONE!" << std::endl;
 
 	std::cout << "activating interrupts..." << std::endl;

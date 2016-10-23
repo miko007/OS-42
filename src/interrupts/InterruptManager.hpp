@@ -45,6 +45,7 @@ namespace interrupts {
 
 		static void HandleRequest0x00();
 		static void HandleRequest0x01();
+		static void HandleRequest0x0C();
 
 		static uint32_t HandleInterrupt(uint8_t number, uint32_t esp);
 		uint32_t processIterrupt(uint8_t number, uint32_t esp);

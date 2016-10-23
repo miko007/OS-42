@@ -30,6 +30,8 @@ namespace interrupts {
 		InterruptManager::SetIDTEntry(0x20, codeSegment, &InterruptManager::HandleRequest0x00, 0, IDTInterruptGate);
 		// keyboard interrupt
 		InterruptManager::SetIDTEntry(0x21, codeSegment, &InterruptManager::HandleRequest0x01, 0, IDTInterruptGate);
+		// mouse interrupt
+		InterruptManager::SetIDTEntry(0x2C, codeSegment, &InterruptManager::HandleRequest0x0C, 0, IDTInterruptGate);
 
 		this->picMCommand.write(0x11);
 		this->picSCommand.write(0x11);
