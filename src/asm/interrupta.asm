@@ -3,11 +3,10 @@
 .section .text
 
 .extern _ZN10interrupts16InterruptManager15HandleInterruptEhj
-.global _ZN10interrupts16InterruptManager13IgnoreRequestEv
 
 .macro ExceptionRequest num
-.global _ZN10interrupts16InterruptManager16ExceptionRequest\num\()Ev
-_ZN10interrupts16InterruptManager16ExceptionRequest\num\()Ev:
+.global _ZN10interrupts16InterruptManager16ExceptionRequestEv
+_ZN10interrupts16InterruptManager16ExceptionRequestEv:
 	movb $\num, (number)
 	jmp int_bottom
 .endm
@@ -32,15 +31,18 @@ int_bottom:
 	pushl %esp
 	push (number)
 	call _ZN10interrupts16InterruptManager15HandleInterruptEhj
+	#add %esp, 6
 	movl %eax, %esp
 
-	popl %gs
-	popl %fs
-	popl %es
-	popl %ds
+	pop %gs
+	pop %fs
+	pop %es
+	pop %ds
 	popa
 
+.global _ZN10interrupts16InterruptManager13IgnoreRequestEv
 _ZN10interrupts16InterruptManager13IgnoreRequestEv:
+
 	iret
 
 .data

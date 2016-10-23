@@ -7,26 +7,25 @@
 namespace memory {
 
 	GlobalDescriptorTable::GlobalDescriptorTable() :
-			null(0, 0, 0),
-			unused(0, 0, 0),
-			code(0, 64 * 1024 * 1024, 0x9A),
-			data(0, 64 * 1024 * 1024, 0x92) {
+			nullSegm(0, 0, 0),
+			unusedSegm(0, 0, 0),
+			codeSegm(0, 64 * 1024 * 1024, 0x9A),
+			dataSegm(0, 64 * 1024 * 1024, 0x92) {
 
 		uint32_t i[2];
 		i[0] = (uint32_t) this;
-		i[1] = sizeof(GlobalDescriptorTable) << 16;
+		i[1] = sizeof(memory::GlobalDescriptorTable) << 16;
 
 		asm volatile("lgdt (%0)" : : "p" (((uint8_t *) i) + 2));
 	}
 
 	uint16_t GlobalDescriptorTable::codeSegmentOffset() {
-		return (uint8_t*) & this->code - (uint8_t*) this;
+		return (uint8_t*) &codeSegm - (uint8_t*) this;
 	}
 
 	uint16_t GlobalDescriptorTable::dataSegmentOffset() {
-		return (uint8_t*) & this->data - (uint8_t*) this;
+		return (uint8_t*) &dataSegm - (uint8_t*) this;
 	}
-
 
 	GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base, uint32_t limit, uint8_t flags) {
 		uint8_t* target = (uint8_t*) this;
@@ -38,7 +37,7 @@ namespace memory {
 			target[6] = 0x40;
 		else {
 			if ((limit & 0xFFF) != 0xFFF)
-				limit = (limit & 0xFFF) - 1;
+				limit = (limit >> 12) - 1;
 			else
 				limit = limit >> 12;
 			target[6] = 0xC0;

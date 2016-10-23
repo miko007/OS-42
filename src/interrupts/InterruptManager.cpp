@@ -4,23 +4,25 @@
 
 #include <interrupts/InterruptManager.hpp>
 #include <iostream.hpp>
-#include <hardware/Port.hpp>
 
 namespace interrupts {
 
 	InterruptManager::GateDescriptor InterruptManager::InterruptDescriptorTable[256];
 
-	InterruptManager::InterruptManager(memory::GDT *gdt) :
+	//checked
+	InterruptManager::InterruptManager(uint16_t hwInterruptOffset, memory::GlobalDescriptorTable *gdt) :
+			hwInterruptOffset(hwInterruptOffset),
 			picMCommand(0x20),
 			picMData(0x21),
 			picSCommand(0xA0),
-			picSData(0xA1){
+			picSData(0xA1) {
 
 		uint16_t codeSegment = gdt->codeSegmentOffset();
 		const uint8_t IDTInterruptGate = 0xE;
 
-		for (uint16_t i = 0; i < 256; i++)
+		for (uint8_t i = 255; i > 0; --i)
 			InterruptManager::SetIDTEntry(i, codeSegment, &InterruptManager::IgnoreRequest, 0, IDTInterruptGate);
+		InterruptManager::SetIDTEntry(0, codeSegment, &InterruptManager::IgnoreRequest, 0, IDTInterruptGate);
 
 		// timer interrupt
 		InterruptManager::SetIDTEntry(0x20, codeSegment, &InterruptManager::HandleRequest0x00, 0, IDTInterruptGate);
@@ -53,18 +55,19 @@ namespace interrupts {
 	}
 
 	uint32_t InterruptManager::HandleInterrupt(uint8_t number, uint32_t esp) {
-		std::cout << "INTERRUPT!" << std::endl;
+		std::cout << "\t\tINTERRUPT!" << std::endl;
 		return esp;
 	}
 
+	//checked
 	void InterruptManager::SetIDTEntry(uint8_t interruptNumber, uint16_t csSelectorOffset, void (*handler)(), uint8_t accessLevel, uint8_t flags) {
 		const uint8_t IDTCurrentDesc = 0x80;
 
 		InterruptManager::InterruptDescriptorTable[interruptNumber].handlerAddrLo = ((uint32_t) handler) & 0xFFFF;
-		InterruptManager::InterruptDescriptorTable[interruptNumber].handlerAddrHi = ((uint32_t) handler >> 16) & 0xFFFF;
-		InterruptManager::InterruptDescriptorTable[interruptNumber].gdtCodeSegmentSelector = csSelectorOffset;
-		InterruptManager::InterruptDescriptorTable[interruptNumber].access = IDTCurrentDesc | flags | ((accessLevel & 3) << 5);
-		InterruptManager::InterruptDescriptorTable[interruptNumber].reserved = 0;
+		InterruptManager::InterruptDescriptorTable[interruptNumber].handlerAddrHi = (((uint32_t) handler) >> 16) & 0xFFFF;
+		InterruptManager::InterruptDescriptorTable[interruptNumber].gdtCodeOffset = csSelectorOffset;
+		InterruptManager::InterruptDescriptorTable[interruptNumber].access        = IDTCurrentDesc | flags | ((accessLevel & 3) << 5);
+		InterruptManager::InterruptDescriptorTable[interruptNumber].reserved      = 0;
 	}
 
 }

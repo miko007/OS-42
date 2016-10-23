@@ -27,10 +27,10 @@ namespace memory {
 			uint32_t limit();
 		} __attribute__((packed));
 	private:
-		SegmentDescriptor null;
-		SegmentDescriptor unused;
-		SegmentDescriptor code;
-		SegmentDescriptor data;
+		SegmentDescriptor nullSegm;
+		SegmentDescriptor unusedSegm;
+		SegmentDescriptor codeSegm;
+		SegmentDescriptor dataSegm;
 	};
 
 	typedef GlobalDescriptorTable GDT;

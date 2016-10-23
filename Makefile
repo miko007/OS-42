@@ -20,6 +20,10 @@ obj/asm/%.o: src/asm/%.asm
 	mkdir -p $(@D)
 	as $(asmParams) -o $@ $<
 
+obj/asm/%.o: src/asm/%.s
+	mkdir -p $(@D)
+	as $(asmParams) -o $@ $<
+
 kernel.bin: linker.ld $(objects)
 	ld $(ldParams) -T $< -o $@ $(objects)
 

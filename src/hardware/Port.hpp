@@ -40,7 +40,7 @@ namespace hardware {
 	public:
 		PortSlow(uint16_t portnumber) : Port(portnumber) {};
 		virtual void write(uint8_t data) {
-			__asm__ volatile("outb %0, %1\njmp 1f\n1:" : : "a" (data), "Nd" (this->portnumber));
+			__asm__ volatile("outb %0, %1\njmp 1f\n1: jmp 1f\n1:" : : "a" (data), "Nd" (this->portnumber));
 		};
 	};
 
