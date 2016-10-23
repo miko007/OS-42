@@ -13,18 +13,18 @@ namespace memory {
 			dataSegm(0, 64 * 1024 * 1024, 0x92) {
 
 		uint32_t i[2];
-		i[0] = (uint32_t) this;
-		i[1] = sizeof(memory::GlobalDescriptorTable) << 16;
+		i[0] = sizeof(GlobalDescriptorTable) << 16;
+		i[1] = (uint32_t)this;
 
-		asm volatile("lgdt (%0)" : : "p" (((uint8_t *) i) + 2));
+		asm volatile("lgdt (%0)": :"p" (((uint8_t *) i) + 2));
 	}
 
 	uint16_t GlobalDescriptorTable::codeSegmentOffset() {
-		return (uint8_t*) &codeSegm - (uint8_t*) this;
+		return (uint8_t*) &this->codeSegm - (uint8_t*) this;
 	}
 
 	uint16_t GlobalDescriptorTable::dataSegmentOffset() {
-		return (uint8_t*) &dataSegm - (uint8_t*) this;
+		return (uint8_t*) &this->dataSegm - (uint8_t*) this;
 	}
 
 	GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base, uint32_t limit, uint8_t flags) {
