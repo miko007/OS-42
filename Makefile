@@ -6,9 +6,11 @@ INC=src/stdlib src
 incParams=$(foreach d, $(INC), -I$d)
 
 objects = obj/asm/loader.o \
+          obj/asm/interrupta.o \
           obj/stdlib/iostream.o \
-          obj/kernel.o \
-          obj/memory/GlobalDescriptorTable.o
+          obj/memory/GlobalDescriptorTable.o \
+          obj/interrupts/InterruptManager.o \
+          obj/kernel.o
 
 obj/%.o: src/%.cpp
 	mkdir -p $(@D)
