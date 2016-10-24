@@ -26,7 +26,7 @@ extern "C" void callConstructors() {
 
 
 extern "C" void kernel(void* multibootStruct, uint32_t magicNumber) {
-	std::cout << "OS/42 x86_32 " << __VERSION__ << " [" << __DATE__ << "] " << std::endl;
+	std::cout << "MikOsoft OS/42 x86_32 " << __VERSION__ << " [" << __DATE__ << "] " << std::endl;
 	std::cout << "(C) 2016, Michael Ochmann<miko@massivedynamic.eu>" << std::endl ;
 	std::cout << "https://mike-ochmann.de" << std::endl << std::endl;
 	std::cout << "[Boot]" << std::endl;
