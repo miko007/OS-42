@@ -56,6 +56,24 @@ namespace std {
 		return *this;
 	}
 
+	ostream &ostream::operator<<(char car) {
+		cout << car;
+	}
+
+	ostream &ostream::operator<<(int integer) {
+		char* output = "000000";
+		uint8_t i = 5;
+		while (integer < 0) {
+			char digit = (char) (integer % 10);
+			output[i] = digit + '0';
+			integer /= 10;
+			i--;
+		}
+		cout << output;
+
+		return *this;
+	}
+
 	ostream &ostream::operator<<(drivers::KeyCode key) {
 		if (key == drivers::BACKSPACE) {
 			this->remove();
