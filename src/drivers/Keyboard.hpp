@@ -7,6 +7,7 @@
 #include <types.hpp>
 #include <hardware/Port.hpp>
 #include <interrupts/InterruptHandler.hpp>
+#include <drivers/Driver.hpp>
 
 namespace interrupts {
 	class InterruptManager;
@@ -59,13 +60,14 @@ namespace drivers {
 		BACKSPACE
 	};
 
-	class Keyboard : public interrupts::InterruptHandler {
+	class Keyboard : public interrupts::InterruptHandler, public drivers::Driver {
 	private:
 		hardware::Port<uint8_t> dataPort;
 		hardware::Port<uint8_t> commandPort;
 	public:
 		Keyboard(interrupts::InterruptManager* manager);
 		virtual uint32_t handleInterrupt(uint32_t esp);
+		virtual void activate();
 	};
 
 }

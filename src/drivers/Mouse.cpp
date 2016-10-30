@@ -16,8 +16,10 @@ namespace drivers {
 			screenBuffer((uint16_t*) 0xb8000),
 			x(40),
 			y(12){
-
 		this->flip();
+	}
+
+	void Mouse::activate() {
 		/**
 		 * tell the PIC to start sending mouse interrupts
 		 */
@@ -81,7 +83,6 @@ namespace drivers {
 										  | ((this->screenBuffer[80 * y + x] & 0x0F00) << 4)
 										  |  (this->screenBuffer[80 * y + x] & 0x00FF);
 	}
-
 
 }
 

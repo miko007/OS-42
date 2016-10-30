@@ -11,7 +11,9 @@ namespace drivers {
 			InterruptHandler(0x21, manager),
 			dataPort(0x60),
 			commandPort(0x64){
+	}
 
+	void Keyboard::activate() {
 		while(this->commandPort.read() & 0x1)
 			this->dataPort.read();
 		/**
@@ -103,4 +105,5 @@ namespace drivers {
 
 		return esp;
 	}
+
 }

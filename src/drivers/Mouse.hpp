@@ -7,6 +7,7 @@
 #include <interrupts/InterruptHandler.hpp>
 #include <hardware/Port.hpp>
 #include <types.hpp>
+#include <drivers/Driver.hpp>
 
 namespace interrupts {
 	class InterruptManager;
@@ -14,7 +15,7 @@ namespace interrupts {
 
 namespace drivers {
 
-	class Mouse : public interrupts::InterruptHandler {
+	class Mouse : public interrupts::InterruptHandler, public drivers::Driver {
 	private:
 		hardware::Port<uint8_t> dataPort;
 		hardware::Port<uint8_t> commandPort;
@@ -28,6 +29,7 @@ namespace drivers {
 	public:
 		Mouse(interrupts::InterruptManager* manager);
 		virtual uint32_t handleInterrupt(uint32_t esp);
+		virtual void activate();
 	};
 
 }
