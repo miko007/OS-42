@@ -27,7 +27,7 @@ namespace std {
 		ostream& operator<<(const char* str);
 		ostream& operator<<(char car);
 		ostream& operator<<(uint8_t hex);
-		ostream& operator<<(int integer);
+		ostream& operator<<(std::decimal integer);
 		/**
 		 * Until we have a shell, this is how we get input on the screen
 		 */

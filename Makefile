@@ -1,4 +1,4 @@
-gppParams = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
+gccParams = -m32 -std=c++11 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings -fcheck-new
 asmParams = --32
 ldParams  = -melf_i386
 
@@ -8,15 +8,17 @@ incParams=$(foreach d, $(INC), -I$d)
 objects = obj/asm/loader.o \
           obj/asm/interrupta.o \
           obj/stdlib/iostream.o \
+          obj/hardware/PeripheralComponentInterconnectController.o \
           obj/drivers/Keyboard.o \
           obj/drivers/Mouse.o \
           obj/memory/GlobalDescriptorTable.o \
+          obj/memory/Manager.o \
           obj/interrupts/InterruptManager.o \
           obj/kernel.o
 
 obj/%.o: src/%.cpp
 	mkdir -p $(@D)
-	gcc -Wall $(incParams) $(gppParams) -c -o $@ $<
+	gcc -Wall $(incParams) $(gccParams) -c -o $@ $<
 
 obj/asm/%.o: src/asm/%.asm
 	mkdir -p $(@D)

@@ -58,16 +58,29 @@ namespace std {
 
 	ostream &ostream::operator<<(char car) {
 		cout << car;
+
+		return *this;
 	}
 
-	ostream &ostream::operator<<(int integer) {
-		char* output = "000000";
-		uint8_t i = 5;
-		while (integer < 0) {
-			char digit = (char) (integer % 10);
-			output[i] = digit + '0';
-			integer /= 10;
+	ostream &ostream::operator<<(std::decimal integer) {
+
+		uint8_t i = 9;
+		uint8_t len = 0;
+		std::decimal intbuf = integer;
+		while (intbuf > 0) {
+			char digit = (char) (intbuf % 10);
+			//output[i] = digit + '0';
+			intbuf /= 10;
+			len++;
 			i--;
+		}
+		i = 0;
+		char output[10] = {};
+		while (integer > 0) {
+			char digit = (char) (integer % 10);
+			output[len - i - 1] = digit + '0';
+			integer /= 10;
+			i++;
 		}
 		cout << output;
 

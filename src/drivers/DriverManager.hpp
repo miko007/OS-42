@@ -27,7 +27,6 @@ namespace drivers {
 			for (uint8_t i = 0; i < this->driverCount; i++) {
 				this->drivers[i]->activate();
 			}
-			std::cout << "\tDONE!" << std::endl;
 		}
 	};
 
