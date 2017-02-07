@@ -17,6 +17,7 @@
 #include <drivers/Keyboard.hpp>
 #include <drivers/Mouse.hpp>
 #include <drivers/DriverManager.hpp>
+#include <string.hpp>
 #include <hardware/PeripheralComponentInterconnectController.hpp>
 
 typedef void (*constructor)();
@@ -31,8 +32,7 @@ extern "C" void callConstructors() {
 extern "C" void kernel(void* multibootStruct, uint32_t magicNumber) {
 	int a = 5;
 	int b = 3;
-	std::decimal c = std::decimal(a+b+10000);
-	std::cout << ":: " << c << std::endl;
+
 	std::cout << "MikOsoft OS/42 x86_32 " << __VERSION__ << " [" << __DATE__ << "] " << std::endl;
 	std::cout << "(C) 2016, Michael Ochmann<miko@massivedynamic.eu>" << std::endl ;
 	std::cout << "https://mike-ochmann.de" << std::endl << std::endl;
@@ -43,6 +43,16 @@ extern "C" void kernel(void* multibootStruct, uint32_t magicNumber) {
 	uint32_t* heapLength = (uint32_t*) (((size_t) multibootStruct) + 8);
 	memory::Manager memoryManager(heapStart, (*heapLength) * 1024 - heapStart - 10 * 1024);
 	interrupts::InterruptManager interruptMgr(0x20, &gdt);
+
+	std::string test = "len";
+	std::string test2 = "len";
+	test += " = ";
+	if (test == test2)
+		std::cout << " >>> gleich";
+	else
+		std::cout << " >>> ungleich";
+	std::decimal c = std::decimal(strlen(test.c_str()));
+	std::cout << test <<  c << std::endl;
 
 	drivers::DriverManager driverMgr;
 	std::cout << "\t- KEYBOARD";

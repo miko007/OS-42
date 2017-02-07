@@ -1,5 +1,5 @@
 #include <memory/Manager.hpp>
-
+#include <iostream.hpp>
 namespace memory {
 
 	Manager* Manager::ActiveManager = nullptr;
@@ -29,25 +29,27 @@ namespace memory {
 		for (Chunk* chunk = this->start; chunk != nullptr && found == nullptr; chunk = chunk->next) {
 			if (chunk->size > size && !chunk->allocated)
 				found = chunk;
-			if (found == nullptr)
-				return nullptr;
-
-			if (found->size >= size + sizeof(Chunk) + 1) {
-				Chunk* newChunk = (Chunk*) ((size_t) found + sizeof(Chunk) + size);
-				newChunk->allocated = false;
-				newChunk->size = found->size - size - sizeof(Chunk);
-				newChunk->previous = found;
-				newChunk->next = found->next;
-				if (newChunk->next != nullptr)
-					newChunk->next->previous = newChunk;
-
-				found->size = size;
-				found->next = newChunk;
-			}
-			found->allocated = true;
-
-			return (void*) (((size_t) found) + sizeof(Chunk));
 		}
+
+		if (found == nullptr)
+			return nullptr;
+
+		if (found->size >= size + sizeof(Chunk) + 1) {
+			Chunk* newChunk = (Chunk*) (((size_t) found) + sizeof(Chunk) + size);
+			newChunk->allocated = false;
+			newChunk->size = found->size - size - sizeof(Chunk);
+			newChunk->previous = found;
+			newChunk->next = found->next;
+			if (newChunk->next != nullptr)
+				newChunk->next->previous = newChunk;
+
+			found->size = size;
+			found->next = newChunk;
+		}
+
+		found->allocated = true;
+
+		return (void*) (((size_t) found) + sizeof(Chunk));
 	}
 
 	void Manager::free(void *pointer) {

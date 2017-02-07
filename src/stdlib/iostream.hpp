@@ -9,6 +9,8 @@
 
 namespace std {
 
+	class string;
+
 	class NewLine{};
 
 	class ostream {
@@ -28,6 +30,8 @@ namespace std {
 		ostream& operator<<(char car);
 		ostream& operator<<(uint8_t hex);
 		ostream& operator<<(std::decimal integer);
+		ostream& operator<<(std::string &string);
+		ostream& operator<<(const std::string &string);
 		/**
 		 * Until we have a shell, this is how we get input on the screen
 		 */

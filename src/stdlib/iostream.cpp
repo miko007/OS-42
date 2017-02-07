@@ -3,6 +3,7 @@
 //
 
 #include <iostream.hpp>
+#include <string.hpp>
 
 namespace std {
 	const int ostream::TABSIZE = 4;
@@ -83,6 +84,18 @@ namespace std {
 			i++;
 		}
 		cout << output;
+
+		return *this;
+	}
+
+	ostream &ostream::operator<<(std::string &string) {
+		cout << string.c_str();
+
+		return *this;
+	}
+
+	ostream &ostream::operator<<(const std::string &string) {
+		cout << string.c_str();
 
 		return *this;
 	}

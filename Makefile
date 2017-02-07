@@ -1,4 +1,4 @@
-gccParams = -m32 -std=c++11 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings -fcheck-new
+gccParams = -m32 -std=c++11 -fno-use-cxa-atexit -nostdlib -nodefaultlibs -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings -fcheck-new
 asmParams = --32
 ldParams  = -melf_i386
 
