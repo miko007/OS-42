@@ -58,7 +58,7 @@ namespace std {
 	}
 
 	ostream &ostream::operator<<(char car) {
-		cout << car;
+		cout << &car;
 
 		return *this;
 	}

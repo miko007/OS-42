@@ -21,11 +21,5 @@ namespace memory {
 		void* malloc(size_t size);
 		void free(void* pointer);
 	};
+
 }
-
-
-void* operator new(unsigned size);
-void* operator new[](unsigned size);
-
-void operator delete(void* pointer);
-void operator delete[](void* pointer);

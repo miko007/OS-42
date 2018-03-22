@@ -3,3 +3,6 @@ obj
 
 *.bin
 *.iso
+
+*.log
+build

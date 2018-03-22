@@ -6,6 +6,7 @@ INC=src/stdlib src
 incParams=$(foreach d, $(INC), -I$d)
 
 objects = obj/asm/loader.o \
+          obj/stdlib/new.o \
           obj/asm/interrupta.o \
           obj/stdlib/iostream.o \
           obj/hardware/PeripheralComponentInterconnectController.o \

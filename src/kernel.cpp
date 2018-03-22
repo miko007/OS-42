@@ -7,7 +7,7 @@
  * @version 0.0.1
  */
 
-#define __VERSION__ "0.0.1"
+#define __VERSION__ "0.0.1-2"
 
 #include <types.hpp>
 #include <iostream.hpp>
@@ -18,6 +18,8 @@
 #include <drivers/Mouse.hpp>
 #include <drivers/DriverManager.hpp>
 #include <string.hpp>
+#include <stdlib/new.hpp>
+#include <stdlib/vector.hpp>
 #include <hardware/PeripheralComponentInterconnectController.hpp>
 
 typedef void (*constructor)();
@@ -42,33 +44,40 @@ extern "C" void kernel(void* multibootStruct, uint32_t magicNumber) {
 	size_t heapStart = MB(10);
 	uint32_t* heapLength = (uint32_t*) (((size_t) multibootStruct) + 8);
 	memory::Manager memoryManager(heapStart, (*heapLength) * 1024 - heapStart - 10 * 1024);
-	interrupts::InterruptManager interruptMgr(0x20, &gdt);
+	/**
+	 * From here on, `operator new` is available
+	 */
+	auto interruptMgr = new interrupts::InterruptManager(0x20, &gdt);
+/*
+	std::string test = "abcde";
+	std::string test2;
 
-	std::string test = "len";
-	std::string test2 = "len";
-	test += " = ";
-	if (test == test2)
-		std::cout << " >>> gleich";
-	else
-		std::cout << " >>> ungleich";
+	test2 = "abcdef";
+	std::cout << test2 << std::endl;
+	test2 = "0123456789abcdef";
+	test2.replace('a', '(');
+	std::cout << test2 << std::endl;
+
+	test.back() = '2';
+
 	std::decimal c = std::decimal(strlen(test.c_str()));
-	std::cout << test <<  c << std::endl;
+	std::cout << test.back() <<  c << std::endl;*/
 
-	drivers::DriverManager driverMgr;
+	auto driverMgr = new drivers::DriverManager();
 	std::cout << "\t- KEYBOARD";
-	drivers::Keyboard keyboard(&interruptMgr);
-	driverMgr.add(&keyboard);
+	auto keyboard = new drivers::Keyboard(interruptMgr);
+	driverMgr->add(keyboard);
 	std::cout << "\tMOUSE" << std::endl;
-	drivers::Mouse mouse(&interruptMgr);
-	driverMgr.add(&mouse);
+	auto mouse = new drivers::Mouse(interruptMgr);
+	driverMgr->add(mouse);
 
-	hardware::PCIController* pciController = new hardware::PCIController();
-	pciController->selectDrivers(&driverMgr);
+	auto pciController = new hardware::PCIController();
+	pciController->selectDrivers(driverMgr);
 
-	driverMgr.activate();
+	driverMgr->activate();
 
 	std::cout << "activating interrupts...";
-	interruptMgr.activate();
+	interruptMgr->activate();
 	std::cout << "\tDONE!" << std::endl << std::endl;
 
 	while(true);
